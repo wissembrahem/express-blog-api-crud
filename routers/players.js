@@ -1,12 +1,13 @@
 import express from "express";
 import asromaPlayers from "../data.js";
-import {index, show, destroy, store} from "../controllers/playerController.js"
+import {index, show, destroy, store, update, modify} from "../controllers/playerController.js"
+import notFound from "../middlewares/pageNotFound.js";
 
 
 const router = express.Router();
 
 //INDEX
-router.get("/", index);
+router.get("/",notFound, index);
 
 //SHOW
 router.get("/:id",show );
@@ -15,16 +16,10 @@ router.get("/:id",show );
 router.post("/", store);
 
 //UPDATE
-router.put("/:id", (req, res) => {
-    const id = req.params.id
-    res.send("load player n."+ id)
-})
+router.put("/:id", update);
 
 //MONDIFY
-router.patch("/:id", (req,res) => {
-    const id = req.params.send
-    res.send("loading player n."+ id)
-})
+router.patch("/:id", modify);
 
 //DESTROY
 router.delete("/:id",destroy)

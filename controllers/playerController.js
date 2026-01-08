@@ -26,6 +26,7 @@ export const destroy = (req, res) => {
 }
 
 export const store = (req,res) => {
+    console.log("Body arrivato:", req.body);
     const newPlayer = req.body;
 
     const lastId = asromaPlayers.length
@@ -34,4 +35,33 @@ export const store = (req,res) => {
     newPlayer.id = lastId + 1;
     asromaPlayers.push(newPlayer);
     res.status(201).json(newPlayer);
+};
+
+export const update = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const index = asromaPlayers.findIndex((p) => p.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "Players not found"});
+    }
+    const updatePlayer = { ...req.body, id };
+
+    asromaPlayers[index] = updatePlayer;
+
+    console.log("PUT UPDATE:", updatePlayer);
+    return res.status(200).json(updatePlayer);
+};
+
+export const modify = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const player = asromaPlayers.find((p) => p.id === id);
+
+    if (!player) {
+        return res.status(404).json({ error: "players not found" });
+    }
+    Object.assign(player, req.body);
+    console.log("patch modify:", player);
+    return res.status(200).json(player);
 };
